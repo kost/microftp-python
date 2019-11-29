@@ -23,6 +23,19 @@ microftpcmd --host 192.168.4.1 get remote-file.txt local-file.txt
 microftpcmd --host 192.168.4.1 rm file-to-delete.txt
 ```
 
+Note that you can also specify basic parameters using environment variables:
+```
+export MICROFTP_HOST=127.0.0.1
+export MICROFTP_USER=user
+export MICROFTP_PASSWORD=password
+export MICROFTP_DIR=/something
+```
+
+and then you can just specify command:
+```
+microftpcmd ls
+```
+
 All options are listed using --help:
 
 ```
