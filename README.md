@@ -28,8 +28,6 @@ All options are listed using --help:
 ```
 microftpcmd --help
 ```
-```
-
 
 Requirements
 ============
@@ -43,7 +41,9 @@ sudo pip3 install microftp
 
 Examples
 ========
+
 Simple example to get devices and its current status:
+
 ```
 import microftp
 
