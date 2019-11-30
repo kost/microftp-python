@@ -10,9 +10,11 @@ def print_content(buf):
   strbuf=buf.decode("ascii")
   print(strbuf)
 
-parser = argparse.ArgumentParser(description='microftp - connect to broken or small FTP servers')
+parser = argparse.ArgumentParser(description='microftp - connect to broken or embedded FTP servers',
+  formatter_class=argparse.RawDescriptionHelpFormatter,
+  epilog="Examples:\nmicroftpcmd --host 192.168.4.1 ls\nmicroftpcmd --host 192.168.4.1 get remote-file.txt local-file.txt\n")
 parser.add_argument('--host', '-i', default=os.environ.get('MICROFTP_HOST', None))
-parser.add_argument('--port', '-P', default=os.environ.get('MICROFTP_PORT', None))
+parser.add_argument('--port', '-P', type=int, default=os.environ.get('MICROFTP_PORT', 21))
 parser.add_argument('--verbose', '-v', action='store_true')
 parser.add_argument('--debug', '-d', action='store_true')
 parser.add_argument('--user', '-u', default=os.environ.get('MICROFTP_USER', None))
@@ -22,10 +24,15 @@ parser.add_argument('commands', metavar='CMD', type=str, nargs='+',
                     help='commands for ftp')
 
 args = parser.parse_args()
-if not args.host and len(commands)<1:
+if not args.host:
   exit(parser.print_usage())
 
-ftp = microftp.microFTP(args.host)
+if not args.commands or len(args.commands)<1:
+  print("Command is not recognized/given")
+  exit(parser.print_usage())
+
+ftp = microftp.microFTP()
+ftp.connect(args.host, args.port)
 ftp.set_pasv(True)
 
 if not args.user:
