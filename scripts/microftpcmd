@@ -19,6 +19,7 @@ parser.add_argument('--verbose', '-v', action='store_true')
 parser.add_argument('--debug', '-d', action='store_true')
 parser.add_argument('--user', '-u', default=os.environ.get('MICROFTP_USER', None))
 parser.add_argument('--password', '-p', default=os.environ.get('MICROFTP_PASSWORD', None))
+parser.add_argument('--site', '-S', default=os.environ.get('MICROFTP_SITE', None))
 parser.add_argument('--dir', '-D', default=os.environ.get('MICROFTP_DIR', None))
 parser.add_argument('commands', metavar='CMD', type=str, nargs='+',
                     help='commands for ftp')
@@ -44,9 +45,22 @@ else:
 if args.debug:
   ftp.set_debuglevel(9999)
 
+if args.site:
+  print("[i] Issuing site command: "+args.site)
+  try:
+    ftp.voidcmd("SITE "+args.site)
+  except:
+    print("[e] Error setting site command: "+args.site)
+
+
 if args.dir:
   print("[i] Changing directory to: "+args.dir)
-  ftp.cwd(args.dir)
+  try:
+    ftp.cwd(args.dir)
+  except:
+    print("[e] Error changing directory to "+args.dir)
+    ftp.quit()
+    exit(1)
 
 cmd = args.commands[0].lower()
 
