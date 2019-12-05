@@ -19,7 +19,8 @@ parser.add_argument('--verbose', '-v', action='store_true')
 parser.add_argument('--debug', '-d', action='store_true')
 parser.add_argument('--user', '-u', default=os.environ.get('MICROFTP_USER', None))
 parser.add_argument('--password', '-p', default=os.environ.get('MICROFTP_PASSWORD', None))
-parser.add_argument('--site', '-S', default=os.environ.get('MICROFTP_SITE', None))
+parser.add_argument('--site', '-S', action='append', default=os.environ.get('MICROFTP_SITE', None))
+parser.add_argument('--siteafter', '-A', action='append', default=os.environ.get('MICROFTP_SITE_AFTER', None))
 parser.add_argument('--dir', '-D', default=os.environ.get('MICROFTP_DIR', None))
 parser.add_argument('commands', metavar='CMD', type=str, nargs='+',
                     help='commands for ftp')
@@ -33,7 +34,12 @@ if not args.commands or len(args.commands)<1:
   exit(parser.print_usage())
 
 ftp = microftp.microFTP()
-ftp.connect(args.host, args.port)
+try:
+  ftp.connect(args.host, args.port)
+except Exception as e:
+  print("Error connecting to host",args.host,"at port",args.port,":",e)
+  exit(1)
+
 ftp.set_pasv(True)
 
 if not args.user:
@@ -46,19 +52,20 @@ if args.debug:
   ftp.set_debuglevel(9999)
 
 if args.site:
-  print("[i] Issuing site command: "+args.site)
-  try:
-    ftp.voidcmd("SITE "+args.site)
-  except:
-    print("[e] Error setting site command: "+args.site)
+  for sitecmd in args.site:
+    print("[i] Issuing site command: "+sitecmd)
+    try:
+      ftp.voidcmd("SITE "+sitecmd)
+    except Exception as e:
+      print("[e] Error setting site command:",sitecmd,":",e)
 
 
 if args.dir:
   print("[i] Changing directory to: "+args.dir)
   try:
     ftp.cwd(args.dir)
-  except:
-    print("[e] Error changing directory to "+args.dir)
+  except Exception as e:
+    print("[e] Error changing directory to",args.dir,":",e)
     ftp.quit()
     exit(1)
 
@@ -104,6 +111,14 @@ elif cmd == "print" or cmd == "cat" or cmd == "type":
   ftp.raw_retrbinary('RETR '+ args.commands[1],print_content)
 else:
   sys.stderr.write("Command not recognized\n")
+
+if args.siteafter:
+  for sitecmd in args.siteafter:
+    print("[i] Issuing site command: "+sitecmd)
+    try:
+      ftp.voidcmd("SITE "+sitecmd)
+    except Exception as e:
+      print("[e] Error setting site command:",sitecmd,":",e)
 
 if args.verbose:
   print("[i] closing FTP")
