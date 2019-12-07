@@ -10,9 +10,16 @@ def print_content(buf):
   strbuf=buf.decode("ascii")
   print(strbuf)
 
+examples="""microftpcmd --host 192.168.4.1 ls
+microftpcmd --host 192.168.4.1 get remote-file.txt local-file.txt
+microftpcmd --host 192.168.4.1 put local-file.txt remote-file.txt
+microftpcmd --host 192.168.4.1 -S mount -D sd -A umount ls
+imicroftpcmd --host 192.168.4.1 -S mount -D sd -A site /sd/blink.bit -A umount put blink.bit blink.bit
+"""
+
 parser = argparse.ArgumentParser(description='microftp - connect to broken or embedded FTP servers',
   formatter_class=argparse.RawDescriptionHelpFormatter,
-  epilog="Examples:\nmicroftpcmd --host 192.168.4.1 ls\nmicroftpcmd --host 192.168.4.1 get remote-file.txt local-file.txt\n")
+  epilog=examples)
 parser.add_argument('--host', '-i', default=os.environ.get('MICROFTP_HOST', None))
 parser.add_argument('--port', '-P', type=int, default=os.environ.get('MICROFTP_PORT', 21))
 parser.add_argument('--verbose', '-v', action='store_true')
