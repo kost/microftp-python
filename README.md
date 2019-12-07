@@ -69,3 +69,35 @@ print(ftp.raw_retrlines('LIST'))
 ftp.quit()
 ```
 
+Manual
+======
+
+```
+usage: microftpcmd [-h] [--host HOST] [--port PORT] [--verbose] [--debug]
+                   [--user USER] [--password PASSWORD] [--site SITE]
+                   [--siteafter SITEAFTER] [--dir DIR]
+                   CMD [CMD ...]
+
+microftp - connect to broken or embedded FTP servers
+
+positional arguments:
+  CMD                   commands for ftp
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --host HOST, -i HOST
+  --port PORT, -P PORT
+  --verbose, -v
+  --debug, -d
+  --user USER, -u USER
+  --password PASSWORD, -p PASSWORD
+  --site SITE, -S SITE
+  --siteafter SITEAFTER, -A SITEAFTER
+  --dir DIR, -D DIR
+
+microftpcmd --host 192.168.4.1 ls
+microftpcmd --host 192.168.4.1 get remote-file.txt local-file.txt
+microftpcmd --host 192.168.4.1 put local-file.txt remote-file.txt
+microftpcmd --host 192.168.4.1 -S mount -D sd -A umount ls
+microftpcmd --host 192.168.4.1 -S mount -D sd -A site /sd/blink.bit -A umount put blink.bit blink.bit
+```
