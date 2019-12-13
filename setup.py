@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="microftp",
-    version="0.7.0",
+    version="0.8.0",
     author="Vlatko Kosturjak",
     author_email="vlatko.kosturjak@gmail.com",
     description="Small FTP library client to handle broken servers",
