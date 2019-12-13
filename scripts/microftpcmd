@@ -14,7 +14,7 @@ examples="""microftpcmd --host 192.168.4.1 ls
 microftpcmd --host 192.168.4.1 get remote-file.txt local-file.txt
 microftpcmd --host 192.168.4.1 put local-file.txt remote-file.txt
 microftpcmd --host 192.168.4.1 -S mount -D sd -A umount ls
-imicroftpcmd --host 192.168.4.1 -S mount -D sd -A site /sd/blink.bit -A umount put blink.bit blink.bit
+microftpcmd --host 192.168.4.1 -S mount -D sd -A site /sd/blink.bit -A umount put blink.bit blink.bit
 """
 
 parser = argparse.ArgumentParser(description='microftp - connect to broken or embedded FTP servers',
@@ -92,7 +92,7 @@ elif cmd == "get" or cmd == "download":
   source=args.commands[1]
   dest=args.commands[2]
   if args.verbose:
-    print("[i] Downloading "+source+" to "+destination)
+    print("[i] Downloading "+source+" to "+dest)
   ftp.raw_retrbinary('RETR '+ source,open(dest, 'wb').write)
 elif cmd == "put" or cmd == "upload":
   if len(args.commands)<3:
