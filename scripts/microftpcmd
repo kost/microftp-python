@@ -3,12 +3,29 @@
 import argparse
 import os
 import sys
+import time
 
 import microftp
 
 def print_content(buf):
   strbuf=buf.decode("ascii")
   print(strbuf)
+
+class FTPcallbacks:
+
+  def __init__(self, verbose, delay, block):
+    self.verbose = verbose
+    self.delay = delay
+    self.bytes = 0
+    self.block = block
+
+  def storcallback(self, parm):
+    # print("[i] parm", parm)
+    if self.delay != 0:
+      if self.verbose:
+        self.bytes = self.bytes + self.block
+        print("[i] Sleeping for", self.delay, "and transferred", self.bytes)
+      time.sleep(self.delay)
 
 examples="""microftpcmd --host 192.168.4.1 ls
 microftpcmd --host 192.168.4.1 get remote-file.txt local-file.txt
@@ -22,6 +39,8 @@ parser = argparse.ArgumentParser(description='microftp - connect to broken or em
   epilog=examples)
 parser.add_argument('--host', '-i', default=os.environ.get('MICROFTP_HOST', None))
 parser.add_argument('--port', '-P', type=int, default=os.environ.get('MICROFTP_PORT', 21))
+parser.add_argument('--delay', type=float, default=os.environ.get('MICROFTP_DELAY', None))
+parser.add_argument('--block', type=int, default=os.environ.get('MICROFTP_BLOCK', None))
 parser.add_argument('--verbose', '-v', action='store_true')
 parser.add_argument('--debug', '-d', action='store_true')
 parser.add_argument('--user', '-u', default=os.environ.get('MICROFTP_USER', None))
@@ -103,7 +122,21 @@ elif cmd == "put" or cmd == "upload":
   dest=args.commands[2]
   if args.verbose:
     print("[i] Uploading "+source+" to "+dest)
-  ftp.raw_storbinary('STOR '+ dest,open(source, 'rb'))
+  if args.block or args.delay:
+    block=1024
+    delay=0.0
+    verbose=False
+    if args.block:
+      block=args.block
+    if args.delay:
+      delay=args.delay
+    if args.verbose:
+      verbose=True
+      print("[i] Using delay", delay, "with block", block)
+    ftpc=FTPcallbacks(verbose, delay, block)
+    ftp.raw_storbinary('STOR '+ dest,open(source, 'rb'), blocksize=block, callback = ftpc.storcallback)
+  else:
+    ftp.raw_storbinary('STOR '+ dest,open(source, 'rb'))
 elif cmd == "del" or cmd == "rm" or cmd == "dele":
   if len(args.commands)<2:
     sys.stderr.write("Not enough arguments for "+cmd+"\n")
