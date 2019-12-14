@@ -73,9 +73,10 @@ Manual
 ======
 
 ```
-usage: microftpcmd [-h] [--host HOST] [--port PORT] [--verbose] [--debug]
-                   [--user USER] [--password PASSWORD] [--site SITE]
-                   [--siteafter SITEAFTER] [--dir DIR]
+usage: microftpcmd [-h] [--host HOST] [--port PORT] [--delay DELAY]
+                   [--block BLOCK] [--verbose] [--debug] [--user USER]
+                   [--password PASSWORD] [--site SITE] [--siteafter SITEAFTER]
+                   [--dir DIR]
                    CMD [CMD ...]
 
 microftp - connect to broken or embedded FTP servers
@@ -87,6 +88,8 @@ optional arguments:
   -h, --help            show this help message and exit
   --host HOST, -i HOST
   --port PORT, -P PORT
+  --delay DELAY
+  --block BLOCK
   --verbose, -v
   --debug, -d
   --user USER, -u USER
@@ -101,3 +104,14 @@ microftpcmd --host 192.168.4.1 put local-file.txt remote-file.txt
 microftpcmd --host 192.168.4.1 -S mount -D sd -A umount ls
 microftpcmd --host 192.168.4.1 -S mount -D sd -A site /sd/blink.bit -A umount put blink.bit blink.bit
 ```
+
+ulx3s
+=====
+
+Some specific ulx3s examples:
+```
+microftpcmd --host 192.168.5.7 --delay 0.3 --block 32 -v -d --user root put ~/wget /root/wget
+microftpcmd --host 192.168.4.1 -S mount -D sd -A umount ls
+microftpcmd --host 192.168.4.1 -S mount -D sd -A site /sd/blink.bit -A umount put blink.bit blink.bit
+```
+
