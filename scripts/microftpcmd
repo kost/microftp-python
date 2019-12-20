@@ -37,17 +37,17 @@ microftpcmd --host 192.168.4.1 -S mount -D sd -A site /sd/blink.bit -A umount pu
 parser = argparse.ArgumentParser(description='microftp - connect to broken or embedded FTP servers',
   formatter_class=argparse.RawDescriptionHelpFormatter,
   epilog=examples)
-parser.add_argument('--host', '-i', default=os.environ.get('MICROFTP_HOST', None))
-parser.add_argument('--port', '-P', type=int, default=os.environ.get('MICROFTP_PORT', 21))
-parser.add_argument('--delay', type=float, default=os.environ.get('MICROFTP_DELAY', None))
-parser.add_argument('--block', type=int, default=os.environ.get('MICROFTP_BLOCK', None))
-parser.add_argument('--verbose', '-v', action='store_true')
-parser.add_argument('--debug', '-d', action='store_true')
-parser.add_argument('--user', '-u', default=os.environ.get('MICROFTP_USER', None))
-parser.add_argument('--password', '-p', default=os.environ.get('MICROFTP_PASSWORD', None))
-parser.add_argument('--site', '-S', action='append', default=os.environ.get('MICROFTP_SITE', None))
-parser.add_argument('--siteafter', '-A', action='append', default=os.environ.get('MICROFTP_SITE_AFTER', None))
-parser.add_argument('--dir', '-D', default=os.environ.get('MICROFTP_DIR', None))
+parser.add_argument('--host', '-i', default=os.environ.get('MICROFTP_HOST', None), help="Host to connect to")
+parser.add_argument('--port', '-P', type=int, default=os.environ.get('MICROFTP_PORT', 21), help="Port to connect to")
+parser.add_argument('--delay', type=float, default=os.environ.get('MICROFTP_DELAY', None), help="Introduce delay between blocks")
+parser.add_argument('--block', type=int, default=os.environ.get('MICROFTP_BLOCK', None), help="Size of block")
+parser.add_argument('--verbose', '-v', action='store_true', help="Enable verbose messages")
+parser.add_argument('--debug', '-d', action='store_true', help="Enable debugging messages")
+parser.add_argument('--user', '-u', default=os.environ.get('MICROFTP_USER', None), help="Specify FTP user")
+parser.add_argument('--password', '-p', default=os.environ.get('MICROFTP_PASSWORD', None), help="Specify FTP password")
+parser.add_argument('--site', '-S', action='append', default=os.environ.get('MICROFTP_SITE', None), help="Specify site command (executed before transfer)")
+parser.add_argument('--siteafter', '-A', action='append', default=os.environ.get('MICROFTP_SITE_AFTER', None), help="Specify site command (executed after transfer)")
+parser.add_argument('--dir', '-D', default=os.environ.get('MICROFTP_DIR', None), help="Specify FTP dir to change before transfer")
 parser.add_argument('commands', metavar='CMD', type=str, nargs='+',
                     help='commands for ftp')
 

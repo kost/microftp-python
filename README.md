@@ -86,17 +86,19 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  --host HOST, -i HOST
-  --port PORT, -P PORT
-  --delay DELAY
-  --block BLOCK
-  --verbose, -v
-  --debug, -d
-  --user USER, -u USER
+  --host HOST, -i HOST  Host to connect to
+  --port PORT, -P PORT  Port to connect to
+  --delay DELAY         Introduce delay between blocks
+  --block BLOCK         Size of block
+  --verbose, -v         Enable verbose messages
+  --debug, -d           Enable debugging messages
+  --user USER, -u USER  Specify FTP user
   --password PASSWORD, -p PASSWORD
-  --site SITE, -S SITE
+                        Specify FTP password
+  --site SITE, -S SITE  Specify site command (executed before transfer)
   --siteafter SITEAFTER, -A SITEAFTER
-  --dir DIR, -D DIR
+                        Specify site command (executed after transfer)
+  --dir DIR, -D DIR     Specify FTP dir to change before transfer
 
 microftpcmd --host 192.168.4.1 ls
 microftpcmd --host 192.168.4.1 get remote-file.txt local-file.txt
