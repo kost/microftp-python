@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/kost/microftp-python.png)](https://travis-ci.org/kost/microftp-python)
+
 microftp
 ======
 Python module to handle FTP protocol (client side only). It is modified original ftplib to handle broken FTP servers in embedded world.
